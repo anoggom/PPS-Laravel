@@ -28,7 +28,28 @@ class AuthController extends Controller
 
     public function refresh(): JsonResponse
     {
-        return $this->respondWithToken(JWTAuth::refresh());
+        try {
+            $token = JWTAuth::getToken();
+
+            if (!$token) {
+                return response()->json(['error' => 'Token no proporcionado'], 400);
+            }
+
+            $newToken = JWTAuth::refresh($token);
+
+            return $this->respondWithToken($newToken);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            try {
+                $newToken = JWTAuth::refresh(JWTAuth::getToken());
+                return $this->respondWithToken($newToken);
+            } catch (\Exception $ex) {
+                return response()->json(['error' => 'Sesión expirada definitivamente'], 401);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['error' => 'Token inválido'], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['error' => 'No se pudo refrescar el token'], 500);
+        }
     }
 
     public function me(): JsonResponse
