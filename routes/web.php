@@ -16,9 +16,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
+    Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
 });
 
-Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
-Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

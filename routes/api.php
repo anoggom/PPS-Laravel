@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\DirectorController;
 
 Route::prefix('auth')->group(function () {
-    
+
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
@@ -12,5 +13,7 @@ Route::prefix('auth')->group(function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::get('me', [AuthController::class, 'me']);
     });
-    
 });
+
+Route::get('/directors', [DirectorController::class, 'index']);
+Route::get('/directors/{director}', [DirectorController::class, 'show']);
