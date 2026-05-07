@@ -12,13 +12,11 @@ class DirectorController extends Controller
      */
     public function index()
     {
-        
-        $directores = Director::paginate(15);
+        $directores = [];
         return view('director.index', [
-            'header' => collect(["Nombre", "Apellido", "Nacimiento"]), 
-            'tableData' => $directores 
+            'header' => collect(["Nombre", "Apellido", "Nacimiento"]),
+            'tableData' => $directores
         ]);
-        
     }
 
     /**
