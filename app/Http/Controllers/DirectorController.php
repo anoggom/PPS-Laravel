@@ -38,10 +38,9 @@ class DirectorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(int $id)
     {
-        $director = Director::findOrFail($id);
-        return view('director.show', compact('director'));
+        return view('director.show', compact('id'));
     }
 
     /**

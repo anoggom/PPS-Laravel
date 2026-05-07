@@ -28,9 +28,10 @@ class DirectorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $director = Director::with('films')->findOrFail($id);
+        return response()->json($director);
     }
 
     /**
