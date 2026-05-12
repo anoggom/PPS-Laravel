@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
     Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
+
+    Route::get('/films', [FilmController::class, 'index'])->name('films.index');
+    Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 });
 
 require __DIR__ . '/auth.php';
