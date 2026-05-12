@@ -2,27 +2,31 @@
 
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\FilmController;
-use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Api\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
+    ->name('login');
 
-    Route::get('/directors', [DirectorController::class, 'index'])->name('directors.index');
-    Route::get('/directors/{director}', [DirectorController::class, 'show'])->name('directors.show');
+Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login']);
 
-    Route::get('/films', [FilmController::class, 'index'])->name('films.index');
-    Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
+Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
+    ->name('register');
+
+Route::post('/register', [App\Http\Controllers\Api\AuthController::class, 'register']);
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/directors', [DirectorController::class, 'index']);
+    Route::get('/directors/{director}', [DirectorController::class, 'show']);
+
+    Route::get('/films', [FilmController::class, 'index']);
+    Route::get('/films/{film}', [FilmController::class, 'show']);
 });
-
-require __DIR__ . '/auth.php';
