@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Director;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DirectorController extends Controller
 {
@@ -14,7 +15,7 @@ class DirectorController extends Controller
     {
         // En la paginación esta el valor null, para que laravel se encargue automaticamente de asignar el número de pagina.
         $directores = Director::paginate(15, ['*'], 'page', null, count(Director::all()));
-        return response()->json($directores);
+        return response()->json($directores, 200);
     }
 
     /**
@@ -30,8 +31,12 @@ class DirectorController extends Controller
      */
     public function show(int $id)
     {
-        $director = Director::with('films')->findOrFail($id);
-        return response()->json($director);
+        try {
+            $director = Director::with('films')->findOrFail($id);
+            return response()->json($director);
+        } catch (ModelNotFoundException $e) {
+            return response()->json('Director no encontrado.', 404);
+        }
     }
 
     /**
