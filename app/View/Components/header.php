@@ -5,16 +5,15 @@ namespace App\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Illuminate\Support\Collection;
 
-class Table extends Component
+class header extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public Collection $header, public $tableData)
+    public function __construct()
     {
-        
+        //
     }
 
     /**
@@ -22,6 +21,6 @@ class Table extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table');
+        return view('components.header');
     }
 }

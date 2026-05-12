@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Director;
+use App\Models\Film;
 
-class DirectorController extends Controller
+class FilmController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $directores = [];
-        return view('director.index', [
-            'header' => collect(["Nombre", "Apellido", "Nacimiento"]),
-            'tableData' => $directores
+        $peliculas = [];
+        return view('film.index', [
+            'header' => collect(["Título", "Año", "Duración", "Género", "Acciones"]),
+            'tableData' => $peliculas
         ]);
     }
 
@@ -40,7 +40,7 @@ class DirectorController extends Controller
      */
     public function show(int $id)
     {
-        return view('director.show', compact('id'));
+        return view('film.show', compact('id'));
     }
 
     /**
