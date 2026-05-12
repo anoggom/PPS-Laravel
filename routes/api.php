@@ -16,8 +16,9 @@ Route::prefix('auth')->group(function () {
     });
 });
 
-Route::get('/directors', [DirectorController::class, 'index']);
-Route::get('/directors/{director}', [DirectorController::class, 'show']);
-
-Route::get('/films', [FilmController::class, 'index']);
-Route::get('/films/{film}', [FilmController::class, 'show']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('/directors', [DirectorController::class, 'index']);
+    Route::get('/directors/{director}', [DirectorController::class, 'show']);
+    Route::get('/films', [FilmController::class, 'index']);
+    Route::get('/films/{film}', [FilmController::class, 'show']);
+});
