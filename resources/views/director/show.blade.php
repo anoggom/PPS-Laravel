@@ -2,7 +2,7 @@
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8" x-data="directorProfileManager()" x-init="fetchDirector({{ $id }})">
 
         <div class="mb-8">
-            <a href="{{ route('directors.index') }}"
+            <a href="/directors"
                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-400 border border-indigo-400/30 rounded-lg hover:bg-indigo-400 hover:text-white transition-all duration-300">
                 Volver al listado
             </a>
@@ -89,7 +89,6 @@
             async fetchDirector(id) {
                 this.loading = true;
                 try {
-
                     const response = await fetch(`/api/directors/${id}`);
                     const data = await response.json();
 

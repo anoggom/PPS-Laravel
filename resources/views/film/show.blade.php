@@ -2,7 +2,7 @@
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8" x-data="filmProfileManager()" x-init="fetchFilm({{ $id }})">
 
         <div class="mb-8">
-            <a href="{{ route('films.index') }}"
+            <a href="/films"
                 class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-400 border border-indigo-400/30 rounded-lg hover:bg-indigo-400 hover:text-white transition-all duration-300">
                 Volver al listado
             </a>
@@ -19,7 +19,7 @@
                     <h5 class="card-title text-4xl text-zinc-200">
                         <span x-text="film.title"></span>
                     </h5>
-                    
+
                     <div class="flex gap-2 flex-wrap mb-2">
                         <span
                             class="px-2 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs border border-indigo-500/20"
@@ -39,8 +39,10 @@
                     </p>
                     <p class="card-text flex flex-col gap-2 mt-4" x-show="film.director">
                         <span class="text-indigo-400 font-semibold">Dirigida por:</span>
-                        <a :href="'/directors/' + (film.director ? film.director.id : '')" class="text-zinc-300 hover:text-indigo-400 transition-colors">
-                            <span x-text="film.director ? (film.director.name + ' ' + film.director.surname) : ''"></span>
+                        <a :href="'/directors/' + (film.director ? film.director.id : '')"
+                            class="text-zinc-300 hover:text-indigo-400 transition-colors">
+                            <span
+                                x-text="film.director ? (film.director.name + ' ' + film.director.surname) : ''"></span>
                         </a>
                     </p>
                 </div>
@@ -62,9 +64,7 @@
                 try {
                     const response = await fetch(`/api/films/${id}`);
                     const data = await response.json();
-
                     this.film = data.data ? data.data : data;
-
                 } catch (error) {
                     console.error("Error al obtener la película:", error);
                 } finally {

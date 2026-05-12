@@ -23,7 +23,8 @@
                                     class="bg-zinc-900/40 border-b border-zinc-800 hover:bg-zinc-800/60 transition-all duration-200 group">
                                     <td class="px-6 py-4 text-center whitespace-nowrap text-zinc-100 font-medium"
                                         x-text="item.title"></td>
-                                    <td class="px-6 py-4 text-center" x-text="new Date(item.release_date).getFullYear()"></td>
+                                    <td class="px-6 py-4 text-center"
+                                        x-text="new Date(item.release_date).getFullYear()"></td>
                                     <td class="px-6 py-4 text-center">
                                         <span class="px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-xs">
                                             <span x-text="item.duration"></span> min
@@ -86,7 +87,7 @@
                     this.totalPages = json.last_page;
                     this.totalRecords = json.total;
                 } catch (error) {
-                    console.error("Error al obtener las películas:", error);
+                    console.error("Error al obtener las películas.");
                 } finally {
                     this.loading = false;
                 }
