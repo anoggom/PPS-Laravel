@@ -36,8 +36,8 @@
                 <!-- Grid de Películas -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template x-for="film in director.films" :key="film.id">
-                        <div
-                            class="group bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-indigo-500/50 transition-all duration-300 shadow-xl">
+                        <a class="group bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl hover:border-indigo-500/50 transition-all duration-300 shadow-xl"
+                            :href="'/films/' + film.id">
                             <div class="flex flex-col h-full gap-4">
                                 <div class="flex justify-between items-start">
                                     <h4 class="text-zinc-100 text-xl font-bold group-hover:text-indigo-400 transition-colors"
@@ -64,7 +64,7 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </template>
                 </div>
 
