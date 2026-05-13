@@ -30,13 +30,4 @@ return Application::configure(basePath: dirname(__DIR__))
             'access_token',
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (AuthenticationException $e, Request $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => 'Error usuario no autenticado',
-                    'status' => 401
-                ], 401);
-            }
-        });
-    })->create();
+    ->withExceptions(function (Exceptions $exceptions) {})->create();
