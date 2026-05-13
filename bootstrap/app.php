@@ -39,12 +39,4 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 401);
             }
         });
-        $exceptions->render(function (Throwable $e, Request $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => 'Error interno del servidor.',
-                    'status' => 500,
-                ], 500);
-            }
-        });
     })->create();
