@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse|RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -25,7 +26,7 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -37,39 +38,33 @@ class AuthController extends Controller
             ], 201);
         }
 
-        return redirect('/login')->with('status', 'Usuario registrado correctamente');
+        return redirect('/login');
     }
 
-    public function login()
+    public function login(Request $request): JsonResponse|RedirectResponse
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only('email', 'password');
 
         if (! $token = Auth::guard('api')->attempt($credentials)) {
-            if (request()->wantsJson()) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-            return back()->withErrors(['email' => 'Credenciales incorrectas']);
+            return response()->json(['error' => 'Email o contraseña incorrectos'], 401);
         }
 
-        $cookie = $this->buildCookie($token);
-
-        if (request()->wantsJson()) {
-            return response()->json([
-                'message' => 'Login OK',
-                'access_token' => $token,
-            ])->withCookie($cookie);
+        if ($request->wantsJson()) {
+            return $this->respondWithToken($token);
         }
 
-        session(['jwt_token' => $token]);
-
-        return redirect()->intended('/')->withCookie($cookie);
+        return redirect()->intended('/')->withCookie($this->buildCookie($token));
     }
 
-    public function logout()
+    public function logout(): JsonResponse|RedirectResponse
     {
         Auth::guard('api')->logout();
 
-        return redirect()->intended("/")->withoutCookie('access_token', '/');
+        if (request()->wantsJson()) {
+            return response()->json(['message' => 'Sesión cerrada correctamente']);
+        }
+
+        return redirect('/')->withoutCookie('access_token', '/');
     }
 
     public function refresh(): JsonResponse
@@ -85,12 +80,7 @@ class AuthController extends Controller
 
             return $this->respondWithToken($newToken);
         } catch (TokenExpiredException $e) {
-            try {
-                $newToken = JWTAuth::refresh(JWTAuth::getToken());
-                return $this->respondWithToken($newToken);
-            } catch (\Exception $ex) {
-                return response()->json(['error' => 'Sesión expirada definitivamente'], 401);
-            }
+            return response()->json(['error' => 'Sesión expirada definitivamente'], 401);
         } catch (TokenInvalidException $e) {
             return response()->json(['error' => 'Token inválido'], 401);
         } catch (JWTException $e) {
