@@ -1,0 +1,658 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "PPS-Laravel",
+		"description": "Colección de pruebas para la API de Peliculapp. Autenticación JWT incluida.\n\n## Flujo de uso\n1. Ejecuta **Register** o **Login** para obtener un token.\n2. El token se asigna automáticamente a la variable `token`.\n3. El resto de endpoints usan `{{token}}` en el header `Authorization`.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"description": "Endpoints de autenticación JWT. Los tokens se guardan automáticamente en la variable `token`.",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    pm.environment.set('token', '');",
+									"    console.log('Usuario registrado correctamente');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Usuario\",\n  \"email\": \"usuario@ejemplo.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('token', jsonData.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@ejemplo.com\",\n  \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('token', jsonData.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "refresh"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Directores",
+			"description": "CRUD completo de directores. Requiere token JWT en el header Authorization.",
+			"item": [
+				{
+					"name": "Listar directores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/directors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors"]
+						}
+					}
+				},
+				{
+					"name": "Crear director",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Christopher\",\n  \"surname\": \"Nolan\",\n  \"birthdate\": \"1970-07-30\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/directors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors"]
+						}
+					}
+				},
+				{
+					"name": "Ver director",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/directors/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors", "1"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar director (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Christopher\",\n  \"surname\": \"Nolan\",\n  \"birthdate\": \"1970-07-30\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/directors/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors", "1"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar director (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"surname\": \"Nolan\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/directors/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors", "1"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar director",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/directors/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors", "1"]
+						}
+					}
+				},
+				{
+					"name": "Error: director no encontrado",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/directors/9999",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors", "9999"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Películas",
+			"description": "CRUD completo de películas. Requiere token JWT en el header Authorization.",
+			"item": [
+				{
+					"name": "Listar películas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/films",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films"]
+						}
+					}
+				},
+				{
+					"name": "Crear película",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Inception\",\n  \"release_date\": \"2010-07-16\",\n  \"sinopsis\": \"Un ladrón especializado en robar secretos del subconsciente.\",\n  \"duration\": 148,\n  \"gendre\": \"Ciencia ficción\",\n  \"director_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/films",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films"]
+						}
+					}
+				},
+				{
+					"name": "Ver película",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/films/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films", "1"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar película (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Inception\",\n  \"release_date\": \"2010-07-16\",\n  \"sinopsis\": \"Un ladrón especializado en robar secretos del subconsciente.\",\n  \"duration\": 148,\n  \"gendre\": \"Ciencia ficción\",\n  \"director_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/films/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films", "1"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar película (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Inception (Actualizada)\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/films/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films", "1"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar película",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/films/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films", "1"]
+						}
+					}
+				},
+				{
+					"name": "Error: película no encontrada",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/films/9999",
+							"host": ["{{base_url}}"],
+							"path": ["api", "films", "9999"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Errores y casos borde",
+			"description": "Casos de error y validaciones.",
+			"item": [
+				{
+					"name": "Login inválido (credenciales incorrectas)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"noexiste@mail.com\",\n  \"password\": \"wrongpass\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Registro inválido (validación falla)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"\",\n  \"email\": \"email-invalido\",\n  \"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Acceso sin token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/directors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "directors"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
