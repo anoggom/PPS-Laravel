@@ -19,6 +19,7 @@
 * [Endpoints](#endpoints)
 * [Ejemplos de peticiones](#ejemplos-de-peticiones)
 * [Base de datos](#base-de-datos)
+* [Desarrollo con Dev Containers](#desarrollo-con-dev-containers)
 
 ---
 
@@ -481,3 +482,73 @@ curl -X DELETE http://127.0.0.1:8000/api/films/1 \
 | `gendre` | varchar |
 | `director_id` | bigint (FK → directors.id) |
 | `created_at` / `updated_at` | timestamp |
+
+---
+
+## Desarrollo con Dev Containers
+
+Este proyecto incluye configuración para **Dev Containers**, compatible con **VS Code** (extensión Dev Containers) y **GitHub Codespaces**.
+
+### Requisitos
+
+| Recurso | Detalle |
+| :--- | :--- |
+| **Docker** | Docker Engine 24+ |
+| **VS Code** | Extensión [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) |
+| **GitHub Codespaces** | Alternativa en la nube (sin instalación local) |
+
+### Estructura
+
+```
+.devcontainer/
+├── devcontainer.json    # Configuración del contenedor de desarrollo
+├── docker-compose.yml   # Servicios: app (PHP 8.3) y MariaDB
+└── Dockerfile           # Imagen Ubuntu 24.04 + PHP 8.3 + Composer + Node.js
+```
+
+### Cómo abrirlo
+
+**Opción 1 — GitHub Codespaces:**
+
+1. Ve al repositorio en GitHub.
+2. Haz clic en el botón **Code ▾ > Codespaces > Create codespace on main**.
+3. Espera a que se construya el entorno (la primera vez puede tardar varios minutos).
+4. Una vez iniciado, el terminal ejecutará automáticamente `composer install` y `php artisan key:generate`.
+
+**Opción 2 — VS Code local (Dev Containers):**
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/anoggom/PPS-Laravel.git
+   ```
+2. Abre la carpeta en VS Code:
+   ```bash
+   code pps-laravel
+   ```
+3. VS Code detectará la carpeta `.devcontainer` y te preguntará *"Reopen in Container"*. Haz clic.
+   - Si no aparece, abre la paleta de comandos (`Ctrl+Mayús+P`) y ejecuta: *Dev Containers: Reopen in Container*.
+4. La primera construcción puede tardar unos minutos.
+
+### Base de datos
+
+MariaDB se ejecuta en un contenedor separado con las siguientes credenciales por defecto:
+
+| Variable | Valor |
+| :--- | :--- |
+| **Host** | `mariadb` (nombre del servicio Docker) |
+| **Puerto** | `3306` |
+| **Base de datos** | `peliculapp` |
+| **Usuario** | `laravel` |
+| **Contraseña** | `laravel_password` |
+
+Estas variables se inyectan como variables de entorno al contenedor `app`, por lo que **no es necesario modificar el archivo `.env`**.
+
+Para ejecutar las migraciones una vez dentro del contenedor:
+
+```bash
+php artisan migrate
+```
+
+### Notas
+
+- Para arrancar el servidor de desarrollo usa `php artisan serve` o `composer run dev`.
