@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: ../.env
+    volumes:
+      - ..:/peliculapp:cached
+    command: sleep infinity
+    environment:
+      DB_HOST: mariadb
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - dev-network
+
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - dev-network
+
+volumes:
+  mariadb-data:
+
+networks:
+  dev-network:
