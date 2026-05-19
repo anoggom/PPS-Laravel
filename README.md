@@ -543,12 +543,12 @@ MariaDB se ejecuta en un contenedor separado con las siguientes credenciales por
 
 Estas variables se inyectan como variables de entorno al contenedor `app`, por lo que **no es necesario modificar el archivo `.env`**.
 
-Para ejecutar las migraciones una vez dentro del contenedor:
+Para ejecutar las migraciones una vez dentro del contenedor (si es la primera vez que entras desde devcontainers):
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
 ```
 
 ### Notas
 
-- Para arrancar el servidor de desarrollo usa `php artisan serve` o `composer run dev`.
+- Para arrancar el servidor de desarrollo hay que usar el siguiente comando `composer run dev`.
