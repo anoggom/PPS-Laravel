@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Peliculas;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Director;
 use App\Models\Film;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PeliculaTest extends TestCase
 {
@@ -32,7 +32,7 @@ class PeliculaTest extends TestCase
 
         Film::factory()->count(3)->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/films');
 
         $response->assertStatus(200)
@@ -49,7 +49,7 @@ class PeliculaTest extends TestCase
 
         $director = Director::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/films', [
                 'title' => 'Inception',
                 'release_date' => '2010-07-16',
@@ -71,7 +71,7 @@ class PeliculaTest extends TestCase
     {
         $token = $this->autenticar();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/films', [
                 'title' => 'Test',
                 'release_date' => '2020-01-01',
@@ -91,7 +91,7 @@ class PeliculaTest extends TestCase
 
         $film = Film::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->putJson("/api/films/{$film->id}", [
                 'title' => 'Título Actualizado',
             ]);
@@ -110,7 +110,7 @@ class PeliculaTest extends TestCase
 
         $film = Film::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->deleteJson("/api/films/{$film->id}");
 
         $response->assertStatus(204);
@@ -133,7 +133,7 @@ class PeliculaTest extends TestCase
             'director_id' => $director->id,
         ]);
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson("/api/films/{$film->id}");
 
         $response->assertStatus(200)

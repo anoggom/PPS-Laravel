@@ -13,6 +13,7 @@ class DirectorController extends Controller
     public function index(): JsonResponse
     {
         $directores = Director::paginate(15, ['*'], 'page', null, count(Director::all()));
+
         return response()->json($directores, 200);
     }
 
@@ -33,6 +34,7 @@ class DirectorController extends Controller
     {
         try {
             $director = Director::with('films')->findOrFail($id);
+
             return response()->json($director);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Director no encontrado.'], 404);
@@ -68,7 +70,7 @@ class DirectorController extends Controller
 
         if ($director->films()->exists()) {
             return response()->json([
-                'error' => 'No se puede eliminar el director porque tiene películas asociadas.'
+                'error' => 'No se puede eliminar el director porque tiene películas asociadas.',
             ], 409);
         }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Director;
 
 class DirectorController extends Controller
 {
@@ -13,9 +12,10 @@ class DirectorController extends Controller
     public function index()
     {
         $directores = [];
+
         return view('director.index', [
-            'header' => collect(["Nombre", "Apellido", "Nacimiento"]),
-            'tableData' => $directores
+            'header' => collect(['Nombre', 'Apellido', 'Nacimiento']),
+            'tableData' => $directores,
         ]);
     }
 

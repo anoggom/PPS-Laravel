@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Directores;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Director;
 use App\Models\Film;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DirectorTest extends TestCase
 {
@@ -39,7 +39,7 @@ class DirectorTest extends TestCase
 
         Director::factory()->count(3)->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/directors');
 
         $response->assertStatus(200)
@@ -54,7 +54,7 @@ class DirectorTest extends TestCase
     {
         $token = $this->autenticar();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/directors', [
                 'name' => 'Christopher',
                 'surname' => 'Nolan',
@@ -74,7 +74,7 @@ class DirectorTest extends TestCase
     {
         $token = $this->autenticar();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/directors', [
                 'name' => '',
                 'surname' => '',
@@ -91,7 +91,7 @@ class DirectorTest extends TestCase
 
         $director = Director::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->putJson("/api/directors/{$director->id}", [
                 'name' => 'Nombre Actualizado',
             ]);
@@ -108,7 +108,7 @@ class DirectorTest extends TestCase
     {
         $token = $this->autenticar();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->putJson('/api/directors/9999', [
                 'name' => 'Nuevo nombre',
             ]);
@@ -122,7 +122,7 @@ class DirectorTest extends TestCase
 
         $director = Director::factory()->create();
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->deleteJson("/api/directors/{$director->id}");
 
         $response->assertStatus(204);
@@ -139,7 +139,7 @@ class DirectorTest extends TestCase
         $director = Director::factory()->create();
         Film::factory()->create(['director_id' => $director->id]);
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->deleteJson("/api/directors/{$director->id}");
 
         $response->assertStatus(409);

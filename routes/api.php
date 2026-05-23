@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DirectorController;
 use App\Http\Controllers\Api\FilmController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
 

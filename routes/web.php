@@ -1,27 +1,25 @@
 <?php
 
-use App\Http\Controllers\DirectorController;
-use App\Http\Controllers\FilmController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\FilmController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
 
-Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
+Route::get('/register', [RegisteredUserController::class, 'create'])
     ->name('register');
 
-Route::post('/register', [App\Http\Controllers\Api\AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/directors', [DirectorController::class, 'index']);

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Auth;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -62,11 +62,11 @@ class AuthTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/auth/logout')
             ->assertStatus(200);
 
-        $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/auth/me')
             ->assertStatus(401);
     }
@@ -84,7 +84,7 @@ class AuthTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        $refreshResponse = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $refreshResponse = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->postJson('/api/auth/refresh');
 
         $refreshResponse->assertStatus(200)
@@ -96,7 +96,7 @@ class AuthTest extends TestCase
 
         $newToken = $refreshResponse->json('access_token');
 
-        $this->withHeaders(['Authorization' => 'Bearer ' . $newToken])
+        $this->withHeaders(['Authorization' => 'Bearer '.$newToken])
             ->getJson('/api/auth/me')
             ->assertStatus(200);
     }
@@ -114,7 +114,7 @@ class AuthTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/auth/me');
 
         $response->assertStatus(200)
