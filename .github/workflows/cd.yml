@@ -59,6 +59,7 @@ jobs:
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST http://localhost:8000/api/auth/login \
             -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
             -d '{"email":"test@example.com","password":"password"}')
 
           if [ "${HTTP_CODE}" != "200" ]; then
