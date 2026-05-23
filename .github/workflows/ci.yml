@@ -108,6 +108,7 @@ jobs:
             -e APP_KEY="$APP_KEY" \
             -e JWT_SECRET="$JWT_SECRET" \
             -e DB_CONNECTION=sqlite \
+            -e SESSION_DRIVER=file \
             laravel-app
       - name: Wait for startup
         run: sleep 5
