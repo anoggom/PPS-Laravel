@@ -111,7 +111,7 @@ jobs:
             -e SESSION_DRIVER=file \
             laravel-app
       - name: Wait for startup
-        run: sleep 5
+        run: sleep 15
       - name: Verify container is running
         run: docker ps --filter name=app-test --filter status=running --format '{{.Names}}' | grep -q app-test
       - name: Verify HTTP response
