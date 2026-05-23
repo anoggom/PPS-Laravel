@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Film;
+use Illuminate\Database\Seeder;
 
 class FilmSeeder extends Seeder
 {
@@ -17,7 +16,7 @@ class FilmSeeder extends Seeder
             // Director 1
             ['title' => 'El Amanecer Eterno', 'release_date' => '2015-05-12', 'sinopsis' => 'Un viaje visual por los paisajes más remotos.', 'duration' => 120, 'gendre' => 'Drama', 'director_id' => 1],
             ['title' => 'Sombras del Pasado', 'release_date' => '2018-11-20', 'sinopsis' => 'Un detective enfrenta sus propios demonios.', 'duration' => 105, 'gendre' => 'Thriller', 'director_id' => 1],
-            
+
             // Director 2
             ['title' => 'Cero Absoluto', 'release_date' => '2020-02-14', 'sinopsis' => 'Supervivencia en el ártico tras un accidente.', 'duration' => 98, 'gendre' => 'Aventura', 'director_id' => 2],
             ['title' => 'Bajo el Hielo', 'release_date' => '2023-01-10', 'sinopsis' => 'El deshielo revela un secreto milenario.', 'duration' => 112, 'gendre' => 'Ciencia Ficción', 'director_id' => 2],

@@ -1,0 +1,71 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+      
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
+
+      - name: Smoke test
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+          docker run -d --name smoke-test \
+            -p 8000:8000 \
+            -e APP_KEY="${APP_KEY}" \
+            -e JWT_SECRET="${JWT_SECRET}" \
+            -e DB_CONNECTION=sqlite \
+            -e SESSION_DRIVER=file \
+            "${IMAGE}"
+
+          sleep 15
+
+          docker exec smoke-test php artisan migrate --force
+          docker exec smoke-test php artisan db:seed --force
+
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST http://localhost:8000/api/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email":"test@example.com","password":"password"}')
+
+          if [ "${HTTP_CODE}" != "200" ]; then
+            echo "Smoke test FAILED: expected HTTP 200, got ${HTTP_CODE}"
+            docker logs smoke-test
+            docker rm -f smoke-test
+            exit 1
+          fi
+
+          echo "Smoke test PASSED (HTTP ${HTTP_CODE})"
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f smoke-test 2>/dev/null || true

@@ -1,0 +1,22 @@
+{
+    "name": "Peliculapp - Laravel",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/peliculapp",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "ms-azuretools.vscode-docker",
+                "eamodio.gitlens",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "postCreateCommand": "git config --global --add safe.directory /peliculapp && composer install && php artisan key:generate && npm install && npm run build",
+    "containerEnv": {
+        "DB_HOST": "mariadb"
+    },
+    "forwardPorts": [8000]
+}

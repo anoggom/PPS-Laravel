@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Director;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,20 +14,20 @@ class DirectorSeeder extends Seeder
     public function run(): void
     {
         //
-        //DB::table('directors')->insert([
+        // DB::table('directors')->insert([
         //    'name' => 'David',
         //    'surname' => 'Lynch',
         //    'birthdate' => now(),
         //    'updated_at' => now(),
         //    'created_at' => now(),
-        //]);
-        //DB::table('directors')->insert([
+        // ]);
+        // DB::table('directors')->insert([
         //    'name' => 'Antonio',
         //    'surname' => 'Banderas',
         //    'birthdate' => now(),
         //    'updated_at' => now(),
         //    'created_at' => now(),
-        //]);
+        // ]);
 
         Director::create(['name' => 'Stanley', 'surname' => 'Kubrick', 'birthdate' => '1928-07-26']);
         Director::create(['name' => 'Martin', 'surname' => 'Scorsese', 'birthdate' => '1942-11-17']);
