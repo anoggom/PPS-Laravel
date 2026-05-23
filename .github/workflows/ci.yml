@@ -107,4 +107,4 @@ jobs:
         run: curl -sf -o /dev/null http://localhost:8000
       - name: Cleanup
         if: always()
-        run: docker stop app-test && docker rm app-test
+        run: docker rm -f app-test 2>/dev/null || true
