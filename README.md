@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/Laravel-10.x-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel">
   <img src="https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php" alt="PHP">
   <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge&logo=json-web-tokens" alt="JWT">
+  <img src="https://github.com/anoggom/PPS-Laravel/actions/workflows/ci.yml/badge.svg?style=for-the-badge" alt="CI">
 </p>
 
 > Aplicación para buscar información sobre películas y sus directores. Construida con **Laravel** y **Blade**, protegida mediante autenticación **JWT**.
@@ -12,6 +13,7 @@
 ---
 
 ## Índice
+* [Pipeline CI/CD](#pipeline-cicd)
 * [Requisitos](#requisitos)
 * [Instalación](#instalación)
 * [Configuración (.env)](#configuración-env)
@@ -20,6 +22,32 @@
 * [Ejemplos de peticiones](#ejemplos-de-peticiones)
 * [Base de datos](#base-de-datos)
 * [Desarrollo con Dev Containers](#desarrollo-con-dev-containers)
+
+---
+
+## Pipeline CI/CD
+
+El repositorio integra **GitHub Actions** para ejecutar un pipeline que garantiza la calidad del código antes de llegar a producción.
+
+### Flujo del pipeline
+
+```mermaid
+flowchart LR
+  A[Push / PR] --> B[lint]
+  B --> C[test]
+  B --> D[security]
+  C --> E[build]
+  D --> E
+```
+
+| Fase | Descripción |
+| :--- | :--- |
+| **lint** | Ejecuta [Laravel Pint](https://laravel.com/docs/pint) para verificar el estilo PSR-12. |
+| **test** | Corre la suite de tests de Laravel (PHPUnit) sobre un entorno efímero. |
+| **security** | Analiza dependencias con `composer audit` y rechaza vulnerabilidades altas o críticas. |
+| **build** | Construye la imagen Docker, arranca el contenedor y verifica que responde correctamente en `localhost:8000`. |
+
+> Las fases `test` y `build` usan el entorno `development` o `production` según la rama disparadora (`develop` o `main`).
 
 ---
 
