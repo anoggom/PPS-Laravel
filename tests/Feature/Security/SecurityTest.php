@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Security;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SecurityTest extends TestCase
@@ -33,7 +33,7 @@ class SecurityTest extends TestCase
 
         $this->travel(2)->minutes();
 
-        $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/auth/me')
             ->assertStatus(401);
     }
@@ -61,7 +61,7 @@ class SecurityTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+        $response = $this->withHeaders(['Authorization' => 'Bearer '.$token])
             ->getJson('/api/auth/me');
 
         $response->assertStatus(200);

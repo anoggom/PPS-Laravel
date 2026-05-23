@@ -13,6 +13,7 @@ class FilmController extends Controller
     public function index(): JsonResponse
     {
         $peliculas = Film::paginate(15, ['*'], 'page', null, count(Film::all()));
+
         return response()->json($peliculas, 200);
     }
 
@@ -36,6 +37,7 @@ class FilmController extends Controller
     {
         try {
             $pelicula = Film::with('director')->findOrFail($id);
+
             return response()->json($pelicula, 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Película no encontrada.'], 404);
