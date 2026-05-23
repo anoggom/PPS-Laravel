@@ -93,12 +93,22 @@ jobs:
   build:
     needs: [lint, test, security]
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    env:
+      APP_KEY: ${{ secrets.APP_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build -t laravel-app .
       - name: Start container
-        run: docker run -d --name app-test -p 8000:8000 laravel-app
+        run: |
+          docker run -d --name app-test -p 8000:8000 \
+            -e APP_KEY="$APP_KEY" \
+            -e JWT_SECRET="$JWT_SECRET" \
+            -e DB_CONNECTION=sqlite \
+            laravel-app
       - name: Wait for startup
         run: sleep 5
       - name: Verify container is running
